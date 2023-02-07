@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">UF1ProjectoFinal</string>
+    <string name="alarm_on_toast">Alarm On</string>
+    <string name="alarm_off_toast">Alarm Off</string>
+    <string name="notification_title">Cambio de Hora</string>
+    <string name="notification_text">Preparate para el cambio de clase!</string>
+</resources>
