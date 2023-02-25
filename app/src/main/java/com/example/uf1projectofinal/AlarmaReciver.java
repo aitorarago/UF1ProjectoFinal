@@ -5,25 +5,39 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.example.uf1projectofinal.databinding.FragmentAlarmBinding;
 import com.example.uf1projectofinal.databinding.ViewholderContenidoBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmaReciver extends Fragment {
     private FragmentAlarmBinding binding;
     AlarmViewModel alarmViewModel;
-
-
-
+    ContenidosAdapter contenidosAdapter = new ContenidosAdapter();
+    public void setAlarm(Alarma.Timer alarm){
+        contenidosAdapter.addContenido(alarm);
+        contenidosAdapter.notifyDataSetChanged();
+    }
+    public void setListTimers(MutableLiveData<Alarma.Respuesta> respuestas){
+        Alarma.Respuesta r = respuestas.getValue();
+        List<Alarma.Timer> timers = new ArrayList<>(r.timers);
+        contenidosAdapter.setContenidoList(timers);
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,6 +50,33 @@ public class AlarmaReciver extends Fragment {
         alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
         ContenidosAdapter contenidosAdapter = new ContenidosAdapter();
         binding.recyclerviewAlarmas.setAdapter(contenidosAdapter);
+        NavController navController = Navigation.findNavController(view);
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_nav_view);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem item1 = menu.findItem(R.id.bottom1Fragment);
+        MenuItem item2 = menu.findItem(R.id.bottom2Fragment);
+        MenuItem item3 = menu.findItem(R.id.bottom3Fragment);
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                navController.navigate(R.id.alarmaReciver);
+                return true;
+            }
+        });
+        item2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                navController.navigate(R.id.nuevaAlarma);
+                return true;
+            }
+        });
+        item3.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                navController.navigate(R.id.alarmasTot);
+                return true;
+            }
+        });
     }
     public void start(int i){
         switch (i){
@@ -56,19 +97,15 @@ public class AlarmaReciver extends Fragment {
     }
     static class ContenidoViewHolder extends RecyclerView.ViewHolder {
         ViewholderContenidoBinding binding;
-        private TextView hora;
+
 
         public ContenidoViewHolder(@NonNull ViewholderContenidoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            hora=binding.comment;
-        }
-        public void bind(Alarma.Respuesta respuesta){
-            hora.setText((CharSequence) respuesta.timers.get(2));
         }
     }
     class ContenidosAdapter extends RecyclerView.Adapter<AlarmaReciver.ContenidoViewHolder> {
-        List<Alarma.Respuesta> contenidoList;
+        List<Alarma.Timer> contenidoList;
 
         @NonNull
         @Override
@@ -78,7 +115,7 @@ public class AlarmaReciver extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull AlarmaReciver.ContenidoViewHolder holder, int position) {
-            Alarma.Respuesta contenido = contenidoList.get(position);
+            Alarma.Timer contenido = contenidoList.get(position);
             holder.binding.comment.setText((CharSequence) contenido);
         }
 
@@ -87,8 +124,12 @@ public class AlarmaReciver extends Fragment {
             return contenidoList == null ? 0 : contenidoList.size();
         }
 
-        public void setContenidoList(List<Alarma.Respuesta> contenidoList) {
+        public void setContenidoList(List<Alarma.Timer> contenidoList) {
             this.contenidoList = contenidoList;
+            notifyDataSetChanged();
+        }
+        public void addContenido(Alarma.Timer respuesta) {
+            this.contenidoList.add(respuesta);
             notifyDataSetChanged();
         }
     }

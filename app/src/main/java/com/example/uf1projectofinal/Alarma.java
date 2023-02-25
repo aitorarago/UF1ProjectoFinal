@@ -15,6 +15,12 @@ public class Alarma {
         int hour;
         int minute;
         String comment;
+
+        public Timer(int hour, int minute, String s) {
+            this.hour=hour;
+            this.minute=minute;
+            comment=s;
+        }
     }
     public static Api api = new Retrofit.Builder()
             .baseUrl("http://mec.elpuig.xeill.net")

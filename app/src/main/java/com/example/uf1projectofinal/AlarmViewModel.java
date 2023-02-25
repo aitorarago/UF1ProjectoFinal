@@ -12,6 +12,7 @@ import retrofit2.Response;
 
 public class AlarmViewModel extends AndroidViewModel {
     MutableLiveData<Alarma.Respuesta> alarmas = new MutableLiveData<>();
+    AlarmaReciver alarmaReciver = new AlarmaReciver();
 
     public AlarmViewModel(@NonNull Application application) {
         super(application);
@@ -22,6 +23,7 @@ public class AlarmViewModel extends AndroidViewModel {
             @Override
             public void onResponse(@NonNull Call<Alarma.Respuesta> call, @NonNull Response<Alarma.Respuesta> response) {
                 alarmas.postValue(response.body());
+                alarmaReciver.setListTimers(alarmas);
             }
 
             @Override

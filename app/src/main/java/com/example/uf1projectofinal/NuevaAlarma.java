@@ -13,6 +13,8 @@ import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,13 +22,11 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 
 import com.example.uf1projectofinal.databinding.FragmentNuevaAlarmaBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Calendar;
 
 public class NuevaAlarma extends Fragment {
-    private FragmentNuevaAlarmaBinding binding;
-    private ImageButton close;
-    private Button save;
     private TimePicker picker;
     Calendar calendar;
     PendingIntent pending_intent;
@@ -37,6 +37,7 @@ public class NuevaAlarma extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        com.example.uf1projectofinal.databinding.FragmentNuevaAlarmaBinding binding;
         return (binding = FragmentNuevaAlarmaBinding.inflate(inflater, container, false)).getRoot();
     }
 
@@ -44,8 +45,8 @@ public class NuevaAlarma extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navController = Navigation.findNavController(view);
-        close=view.findViewById(R.id.closse);
-        save=view.findViewById(R.id.guardar);
+        ImageButton close = view.findViewById(R.id.closse);
+        Button save = view.findViewById(R.id.guardar);
         picker=view.findViewById(R.id.timePicker);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +59,9 @@ public class NuevaAlarma extends Fragment {
                 alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
                 Log.d("msg119", ""+calendar.getTimeInMillis()+" "+pending_intent);
 
+                Alarma.Timer timer = new Alarma.Timer(picker.getHour(),picker.getMinute(),picker.getHour()+":"+ picker.getMinute());
+                AlarmaReciver alarmaReciver = new AlarmaReciver();
+                alarmaReciver.setAlarm(timer);
                 navController.navigate(R.id.alarmaReciver);
             }
         });
@@ -65,6 +69,32 @@ public class NuevaAlarma extends Fragment {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.alarmaReciver);
+            }
+        });
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_nav_view);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem item1 = menu.findItem(R.id.bottom1Fragment);
+        MenuItem item2 = menu.findItem(R.id.bottom2Fragment);
+        MenuItem item3 = menu.findItem(R.id.bottom3Fragment);
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                navController.navigate(R.id.alarmaReciver);
+                return true;
+            }
+        });
+        item2.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                navController.navigate(R.id.nuevaAlarma);
+                return true;
+            }
+        });
+        item3.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                navController.navigate(R.id.alarmasTot);
+                return true;
             }
         });
     }
