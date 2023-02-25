@@ -4,4 +4,6 @@
     <string name="alarm_off_toast">Alarm Off</string>
     <string name="notification_title">Cambio de Hora</string>
     <string name="notification_text">Preparate para el cambio de clase!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
