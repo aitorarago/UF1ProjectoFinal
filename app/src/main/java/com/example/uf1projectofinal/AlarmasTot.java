@@ -44,21 +44,27 @@ public class AlarmasTot extends Fragment {
         buttontots.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmReceiver.start(0);
+                alarmReceiver.setBuscar(0);
+                navController.navigate(R.id.alarmaReciver);
+
             }
         });
         buttonmati=view.findViewById(R.id.ciclesformtiusmati);
         buttonmati.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmReceiver.start(1);
+                alarmReceiver.setBuscar(1);
+                navController.navigate(R.id.alarmaReciver);
+
             }
         });
         buttontarda=view.findViewById(R.id.ciclesformtiustarda);
         buttontarda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmReceiver.start(2);
+
+                alarmReceiver.setBuscar(2);
+                navController.navigate(R.id.alarmaReciver);
             }
         });
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_nav_view);
@@ -89,9 +95,8 @@ public class AlarmasTot extends Fragment {
         });
 
 
+
     }
-    public void sendError(){
-        Snackbar.make(view.findViewById(R.id.mainview),"ERROR AL INTENTAR DESCARGAR LAS ALARMAS EN EL DISPOSITIVO", Snackbar.LENGTH_SHORT).show();
-    }
+
 }
 

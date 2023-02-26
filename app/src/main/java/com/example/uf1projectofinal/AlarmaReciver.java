@@ -1,5 +1,7 @@
 package com.example.uf1projectofinal;
 
+import static com.example.uf1projectofinal.R.id.alarmaReciver;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,19 +18,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.uf1projectofinal.databinding.FragmentAlarmBinding;
 import com.example.uf1projectofinal.databinding.ViewholderContenidoBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmaReciver extends Fragment {
     private FragmentAlarmBinding binding;
+    View view;
     AlarmViewModel alarmViewModel;
     ContenidosAdapter contenidosAdapter = new ContenidosAdapter();
+    private int busqueda;
     public void setAlarm(Alarma.Timer alarm){
         contenidosAdapter.addContenido(alarm);
         contenidosAdapter.notifyDataSetChanged();
@@ -47,6 +51,7 @@ public class AlarmaReciver extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view=view;
         alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
         ContenidosAdapter contenidosAdapter = new ContenidosAdapter();
         binding.recyclerviewAlarmas.setAdapter(contenidosAdapter);
@@ -59,7 +64,7 @@ public class AlarmaReciver extends Fragment {
         item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                navController.navigate(R.id.alarmaReciver);
+                navController.navigate(alarmaReciver);
                 return true;
             }
         });
@@ -77,24 +82,30 @@ public class AlarmaReciver extends Fragment {
                 return true;
             }
         });
-    }
-    public void start(int i){
-        switch (i){
+        switch (busqueda){
             case 0:
-                setBuscador("ccff-diurn-i-tarda.json");
+                alarmViewModel.buscar("ccff-diurn-i-tarda.json",view);
                 break;
             case 1:
-                setBuscador("ccff-diurn.json");
+                alarmViewModel.buscar("ccff-diurn.json",view);
                 break;
             case 2:
-                setBuscador("ccff-tarda.json");
+                alarmViewModel.buscar("ccff-tarda.json",view);
                 break;
         }
 
+
     }
-    public void setBuscador(String string){
-        alarmViewModel.buscar(string);
+    public void setBuscar(int i){
+        busqueda=i;
+
     }
+
+    public void sendError(View view) {
+        Snackbar.make(view, "ERROR AL INTENTAR DESCARGAR LAS ALARMAS EN EL DISPOSITIVO",Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
     static class ContenidoViewHolder extends RecyclerView.ViewHolder {
         ViewholderContenidoBinding binding;
 
