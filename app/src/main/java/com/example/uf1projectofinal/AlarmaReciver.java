@@ -126,8 +126,10 @@ public class AlarmaReciver extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull AlarmaReciver.ContenidoViewHolder holder, int position) {
-            Alarma.Timer contenido = contenidoList.get(position);
-            holder.binding.comment.setText((CharSequence) contenido);
+            Alarma.Timer h = contenidoList.get(0);
+            Alarma.Timer m = contenidoList.get(1);
+            holder.binding.hora.setText((CharSequence) h+" : ");
+            holder.binding.minutos.setText((CharSequence) m);
         }
 
         @Override

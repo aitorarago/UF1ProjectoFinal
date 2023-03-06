@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public class Alarma {
@@ -23,12 +24,13 @@ public class Alarma {
         }
     }
     public static Api api = new Retrofit.Builder()
-            .baseUrl("http://mec.elpuig.xeill.net")
+            .baseUrl("http://mec.elpuig.xeill.net/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(Api.class);
     public interface Api {
         @GET("/")
-        Call<Respuesta> buscar(@Query("") String texto);
-    }
+        Call<Respuesta> buscar(@Path("extension") String extension);
+
+}
 }

@@ -17,7 +17,6 @@ import android.widget.Button;
 
 import com.example.uf1projectofinal.databinding.FragmentAlarmasTotBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 public class AlarmasTot extends Fragment {
     NavController navController;
